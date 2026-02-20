@@ -1,13 +1,17 @@
 import pygame
+# 549
+# 379
 
 class Player():
     def __init__(self, window, WIDTH, HEIGHT):
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
         self.window = window
-        self.rect = pygame.Rect(0, self.HEIGHT - 200, 120, 120)
-        self.img = pygame.image.load("images/robot.png")
-        self.img = pygame.transform.scale(self.img, (120, 120))
+        self.player_width = 549/2
+        self.player_height = 379/2
+        self.rect = pygame.Rect(0, self.HEIGHT - 200, self.player_width, self.player_height)
+        self.img = pygame.image.load("images/terminator.png")
+        self.img = pygame.transform.scale(self.img, (self.player_width, self.player_height))
 
     def draw_player(self):
         self.window.blit(self.img, self.rect)

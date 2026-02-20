@@ -2,6 +2,7 @@ import pygame
 import random
 import trashclass
 import player
+import button
 
 class Game():
     def __init__(self):
@@ -11,12 +12,13 @@ class Game():
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
 
+        self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
+        pygame.display.set_caption("EcoCatcher")
 
         self.load_images()
         self.init_rectangles()
+        self.init_buttons()
 
-        self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
-        pygame.display.set_caption("EcoCatcher")
 
         self.player = player.Player(self.window, self.WIDTH, self.HEIGHT)
 
@@ -24,7 +26,6 @@ class Game():
         self.font = pygame.font.SysFont(None, 50)
 
         self.stan = "menu"
-
         self.butelki = 0
 
         self.trash_ar = []
@@ -49,7 +50,7 @@ class Game():
 
                 if self.stan == "menu":
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        if self.przycisk.collidepoint(event.pos):
+                        if self.start_button.isClicked():
                             self.stan = "gra"
 
                 if self.stan == "gameover":
@@ -109,10 +110,8 @@ class Game():
         tytul = self.font_big.render("Save our school", True, (0, 0, 0))
         self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
 
-        pygame.draw.rect(self.window, (0, 180, 0), self.przycisk)
 
-        napis = self.font.render("START", True, (255, 255, 255))
-        self.window.blit(napis, (self.przycisk.x + 70, self.przycisk.y + 25))
+        self.start_button.draw()
     
     def show_end(self):
        pass 
@@ -141,7 +140,6 @@ class Game():
     def init_rectangles(self):
         
         self.gobutelkomat_rect = pygame.Rect(self.WIDTH - 300, self.HEIGHT - 200, 250, 100)
-        self.przycisk = pygame.Rect( self.WIDTH / 2 - 120, self.HEIGHT / 2, 240, 90)
         self.bad_rect = pygame.Rect(random.randint(0, self.WIDTH - 120), random.randint(-self.HEIGHT, 0), self.TRASH_WIDTH, self.TRASH_HEIGHT)
 
     def load_images(self):
@@ -150,3 +148,5 @@ class Game():
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
 
+    def init_buttons(self):
+        self.start_button = button.Button(self.window, pygame.Rect( self.WIDTH / 2 - 215, self.HEIGHT/2, 430, 117), "images/start.png")
