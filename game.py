@@ -1,5 +1,6 @@
 import pygame
 import random
+import trash
 import player
 
 class Game():
@@ -14,7 +15,6 @@ class Game():
         self.load_images()
         self.dobre = [self.smiec1_img, self.smiec2_img, self.smiec3_img]
         self.init_rectangles()
-        self.init_trash()
 
         self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
         pygame.display.set_caption("EcoCatcher")
@@ -63,7 +63,6 @@ class Game():
             # ===== SHOP =====
             if self.stan == "shop":
                 pass
-
             # ===== GAME OVER =====
             if self.stan == "gameover":
                 self.show_gameover()
@@ -76,29 +75,6 @@ class Game():
         self.player.move()
         self.window.blit(self.background, (0, 0))
 
-        for smiec in self.smieci:
-            # [rect, img]
-            trash_rect = smiec[0]
-            trash_rect.y += 6
-
-            if trash_rect.y > self.HEIGHT:
-                trash_rect.x = random.randint(0, self.WIDTH - 120)
-                trash_rect.y = random.randint(-300, 0)
-                smiec[1] = random.choice(self.dobre)
-
-            srodek_x = trash_rect.x + self.TRASH_WIDTH / 2
-            dol_y = trash_rect.y + self.TRASH_HEIGHT
-
-            # TO MODIFY
-            if trash_rect.colliderect(self.player.rect):
-                self.butelki += 1
-
-                trash_rect.x = random.randint(0, self.WIDTH - 120)
-                trash_rect.y = random.randint(-300, 0)
-                smiec[1] = random.choice(self.dobre)
-
-            smiec[0] = trash_rect
-            self.window.blit(smiec[1], smiec[0])
 
         self.bad_rect.y += 6
 
@@ -166,23 +142,3 @@ class Game():
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
 
-
-        self.smiec1_img = pygame.image.load("images/smiec4.png")
-        self.smiec2_img = pygame.image.load("images/smiec2.png")
-        self.smiec3_img = pygame.image.load("images/smiec3.png")
-        self.zly_smiec_img = pygame.image.load("images/zly_smiec.png")
-
-
-        self.smiec1_img = pygame.transform.scale(self.smiec1_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
-        self.smiec2_img = pygame.transform.scale(self.smiec2_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
-        self.smiec3_img = pygame.transform.scale(self.smiec2_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
-        self.zly_smiec_img = pygame.transform.scale(self.zly_smiec_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
-
-    def init_trash(self):
-        self.smieci = []
-        for i in range(self.MAX_TRASH):
-            x = random.randint(0, self.WIDTH - self.TRASH_WIDTH)
-            y = random.randint(-self.HEIGHT, 0)
-            trash_rect = pygame.Rect(x, y, self.TRASH_WIDTH, self.TRASH_HEIGHT)
-            obraz = random.choice(self.dobre)
-            self.smieci.append([trash_rect, obraz])
