@@ -7,7 +7,7 @@ class Game():
     def __init__(self):
         self.WIDTH = 1920
         self.HEIGHT = 1080
-        self.MAX_TRASH = 1
+        self.MAX_TRASH = 5
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
 
@@ -80,6 +80,13 @@ class Game():
             if trash.rect.y > self.HEIGHT:
                 self.trash_ar.remove(trash)
                 self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
+            if trash.rect.colliderect(self.player.rect):
+                self.trash_ar.remove(trash)
+                self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
+                if trash.isBad:
+                    self.stan = 'gameover'
+                else:
+                    self.butelki += 1
 
 
     def show_game(self):
