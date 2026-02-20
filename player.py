@@ -10,7 +10,6 @@ class Player():
         self.img = pygame.transform.scale(self.img, (120, 120))
 
     def draw_player(self):
-        print("dziala")
         self.window.blit(self.img, self.rect)
 
     def update(self):

@@ -1,6 +1,6 @@
 import pygame
 import random
-import trash
+import trashclass
 import player
 
 class Game():
@@ -13,7 +13,6 @@ class Game():
 
 
         self.load_images()
-        self.dobre = [self.smiec1_img, self.smiec2_img, self.smiec3_img]
         self.init_rectangles()
 
         self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
@@ -27,6 +26,10 @@ class Game():
         self.stan = "menu"
 
         self.butelki = 0
+
+        self.trash_ar = []
+        for i in range(self.MAX_TRASH):
+           self.trash_ar.append(trashclass.Trash(self.window, self.WIDTH, self.HEIGHT)) 
 
         self.zegar = pygame.time.Clock()
 
@@ -59,6 +62,7 @@ class Game():
                 self.show_menu()
             # ===== GRA =====
             if self.stan == "gra":
+                self.update_game()
                 self.show_game()
             # ===== SHOP =====
             if self.stan == "shop":
@@ -68,29 +72,26 @@ class Game():
                 self.show_gameover()
 
             pygame.display.update()
+
     def update_game(self):
-        pass
+         self.player.move()
+         for trash in self.trash_ar:
+            trash.update()
+            if trash.rect.y > self.HEIGHT:
+                self.trash_ar.remove(trash)
+                self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
+
 
     def show_game(self):
-        self.player.move()
         self.window.blit(self.background, (0, 0))
-
-
-        self.bad_rect.y += 6
-
-        if self.bad_rect.y > self.HEIGHT:
-            self.bad_rect.y = random.randint(-self.HEIGHT, 0)
-            self.bad_rect.x = random.randint(0, self.WIDTH - 120)
-        if self.bad_rect.colliderect(self.player):
-            self.stan = "gameover"
-            self.bad_rect.y = random.randint(-self.HEIGHT, 0)
-            self.bad_rect.x = random.randint(0, self.WIDTH - 120)
-        self.window.blit(self.zly_smiec_img, self.bad_rect) 
+        for trash in self.trash_ar:
+            trash.draw()
 
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
 
         napis = self.font.render("Shop", True, (0,0,0))
         self.player.draw_player()
+
         pygame.draw.rect(self.window, (0,255,0), self.gobutelkomat_rect)
         self.window.blit(napis, (self.gobutelkomat_rect.x + 20, self.gobutelkomat_rect.y + 20))  
         self.window.blit(wynik, (20, 20))
