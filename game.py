@@ -4,6 +4,7 @@ import trashclass
 import player
 import button
 import skinmanager
+import skrzynki
 
 class Game():
     def __init__(self):
@@ -62,7 +63,7 @@ class Game():
                             if self.player.isUnlocked:
                                 self.reset_lvl()
                                 self.player.set_scale(1)
-                                self.stan = "gra"
+                                self.stan = "opening"
 
                         if self.left_button.isClicked():
                             self.skinManager.previuskin()
@@ -85,7 +86,10 @@ class Game():
                 self.show_game()
             
             if self.stan == 'opening':
-                pass
+                s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
+                s.run()
+                # opened skin = Skin Class
+                # state == 'workshop' 
 
             if self.stan == "workshop":
                 self.show_workshop()
