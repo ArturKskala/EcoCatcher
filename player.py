@@ -7,14 +7,23 @@ class Player():
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
         self.window = window
-        self.player_width = 549/2
-        self.player_height = 379/2
+        self.player_width = 549/2.5
+        self.player_height = 379/2.5
+        self.dir = 'left' # 'right'
         self.rect = pygame.Rect(0, self.HEIGHT - 200, self.player_width, self.player_height)
+        self.hitbox = pygame.Rect(0, self.HEIGHT - 200, self.player_width-40, self.player_height-20)
         self.img = pygame.image.load("images/terminator.png")
         self.img = pygame.transform.scale(self.img, (self.player_width, self.player_height))
 
     def draw_player(self):
-        self.window.blit(self.img, self.rect)
+#        pygame.draw.rect(self.window, (255,255,0), self.rect)
+#        pygame.draw.rect(self.window, (0,255,0), self.hitbox)
+#        pygame.draw.circle(self.window, (0,255,255), self.rect.center, 5)
+
+        if self.dir == 'left':
+            self.window.blit(self.img, self.rect)
+        else:
+            self.window.blit(pygame.transform.flip(self.img, 1, 0), self.rect)
 
     def update(self):
         pass
@@ -24,8 +33,10 @@ class Player():
 
         if klawisze[pygame.K_LEFT] or klawisze[pygame.K_a]:
             self.rect.x -= 20
+            self.dir = 'left'
         if klawisze[pygame.K_RIGHT] or klawisze[pygame.K_d]:
             self.rect.x += 20
+            self.dir = 'right'
         if klawisze[pygame.K_UP] or klawisze[pygame.K_w]:
             self.rect.y -= 20
         if klawisze[pygame.K_DOWN] or klawisze[pygame.K_s]:
@@ -40,3 +51,5 @@ class Player():
             self.rect.y = 0
         if self.rect.y > self.HEIGHT - 120:
             self.rect.y = self.HEIGHT - 120
+        
+        self.hitbox.center = self.rect.center

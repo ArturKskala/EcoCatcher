@@ -68,10 +68,13 @@ class Game():
             # ===== SHOP =====
             if self.stan == "shop":
                 pass
+            if self.stan == "workshop":
+                pass
             # ===== GAME OVER =====
             if self.stan == "gameover":
                 self.show_gameover()
 
+            self.window.blit(self.font.render(f'FPS: {self.zegar.get_fps()}', 1, (0,255,0)), (self.WIDTH - 200, 0))
             pygame.display.update()
 
     def update_game(self):
@@ -81,7 +84,7 @@ class Game():
             if trash.rect.y > self.HEIGHT:
                 self.trash_ar.remove(trash)
                 self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
-            if trash.rect.colliderect(self.player.rect):
+            if trash.hibox.colliderect(self.player.hitbox):
                 self.trash_ar.remove(trash)
                 self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
                 if trash.isBad:
@@ -100,8 +103,6 @@ class Game():
         napis = self.font.render("Shop", True, (0,0,0))
         self.player.draw_player()
 
-        pygame.draw.rect(self.window, (0,255,0), self.gobutelkomat_rect)
-        self.window.blit(napis, (self.gobutelkomat_rect.x + 20, self.gobutelkomat_rect.y + 20))  
         self.window.blit(wynik, (20, 20))
 
     def show_menu(self):
@@ -139,7 +140,6 @@ class Game():
 
     def init_rectangles(self):
         
-        self.gobutelkomat_rect = pygame.Rect(self.WIDTH - 300, self.HEIGHT - 200, 250, 100)
         self.bad_rect = pygame.Rect(random.randint(0, self.WIDTH - 120), random.randint(-self.HEIGHT, 0), self.TRASH_WIDTH, self.TRASH_HEIGHT)
 
     def load_images(self):

@@ -36,9 +36,12 @@ class Trash():
         x = random.randint(0, self.WIDTH - TRASH_WIDTH)
         y = random.randint(-self.HEIGHT, 0)
         self.rect = pygame.Rect(x, y, TRASH_WIDTH, TRASH_HEIGHT)
+        self.hibox = pygame.Rect(x, y, TRASH_WIDTH-30, TRASH_HEIGHT-10)
 
     def update(self):
         self.rect.y += 6
+        self.hibox.center = self.rect.center
 
     def draw(self):
+#        pygame.draw.rect(self.window, (255,0,0), self.hibox)
         self.window.blit(self.img, self.rect)
