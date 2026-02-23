@@ -118,6 +118,7 @@ class Game():
        pass 
 
     def show_gameover(self):
+        self.butelki = 0
         self.window.blit(self.background_gameover, (0, 0))
 
         # GAME OVER z cieniem
@@ -150,3 +151,4 @@ class Game():
 
     def init_buttons(self):
         self.start_button = button.Button(self.window, pygame.Rect( self.WIDTH / 2 - 215, self.HEIGHT/2, 430, 117), "images/start.png")
+        self.shop_button = button.Button(self.window, pygame.Rect(0,0, 415, 105), 'images/shopnow.png')
