@@ -9,11 +9,20 @@ class Player():
         self.window = window
         self.player_width = 549/2.5
         self.player_height = 379/2.5
+
         self.dir = 'left' # 'right'
         self.rect = pygame.Rect(0, self.HEIGHT - 200, self.player_width, self.player_height)
+        # self.lock_rect = pygame.Rect()
         self.hitbox = pygame.Rect(0, self.HEIGHT - 200, self.player_width-40, self.player_height-20)
-        self.img = pygame.image.load("images/terminator.png")
-        self.img = pygame.transform.scale(self.img, (self.player_width, self.player_height))
+
+        self.scale = 1
+        self.image_path = "images/skins/robot.png"
+        self.img = pygame.image.load(self.image_path)
+        self.img = pygame.transform.scale(self.img, (self.player_width*self.scale, self.player_height*self.scale))
+        self.lock = pygame.image.load("images/klodka.png")
+        self.lock = pygame.transform.scale(self.lock, (100, 154))
+
+        self.isUnlocked = True
 
     def draw_player(self):
 #        pygame.draw.rect(self.window, (255,255,0), self.rect)
@@ -25,8 +34,24 @@ class Player():
         else:
             self.window.blit(pygame.transform.flip(self.img, 1, 0), self.rect)
 
-    def update(self):
-        pass
+        if not self.isUnlocked:
+            self.window.blit(self.lock, pygame.Rect(self.rect.centerx + 50, self.rect.centery, self.img.get_width(), self.img.get_height()))
+
+    def set_skin(self, skin):
+        self.image_path = skin['image']
+        self.isUnlocked = skin['unlocked']
+        self.img = pygame.image.load(self.image_path)
+        self.img = pygame.transform.scale(self.img, (self.player_width*self.scale, self.player_height*self.scale))
+
+    def set_scale(self, scale):
+        self.scale = scale
+        self.img = pygame.image.load(self.image_path)
+        self.img = pygame.transform.scale(self.img, (self.player_width*self.scale, self.player_height*self.scale))
+
+    def set_pos(self, x, y, dir = 'left'):
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.dir = dir
 
     def move(self):
         klawisze = pygame.key.get_pressed()

@@ -3,6 +3,7 @@ import random
 import trashclass
 import player
 import button
+import skinmanager
 
 class Game():
     def __init__(self):
@@ -21,11 +22,12 @@ class Game():
 
 
         self.player = player.Player(self.window, self.WIDTH, self.HEIGHT)
+        self.skinManager = skinmanager.SkinManager()
 
         self.font_big = pygame.font.SysFont(None, 90)
         self.font = pygame.font.SysFont(None, 50)
 
-        self.stan = "menu"
+        self.stan = "workshop"
         self.butelki = 0
 
         self.trash_ar = []
@@ -51,7 +53,23 @@ class Game():
                 if self.stan == "menu":
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.start_button.isClicked():
+                            self.reset_lvl()
                             self.stan = "gra"
+                
+                if self.stan == "workshop":
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if self.go_button.isClicked():
+                            if self.player.isUnlocked:
+                                self.reset_lvl()
+                                self.player.set_scale(1)
+                                self.stan = "gra"
+
+                        if self.left_button.isClicked():
+                            self.skinManager.previuskin()
+                            self.player.set_skin(self.skinManager.get_current_skin())
+                        if self.right_button.isClicked():
+                            self.skinManager.nextskin()
+                            self.player.set_skin(self.skinManager.get_current_skin())
 
                 if self.stan == "gameover":
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -65,17 +83,19 @@ class Game():
             if self.stan == "gra":
                 self.update_game()
                 self.show_game()
-            # ===== SHOP =====
-            if self.stan == "shop":
+            
+            if self.stan == 'opening':
                 pass
+
             if self.stan == "workshop":
-                pass
+                self.show_workshop()
             # ===== GAME OVER =====
             if self.stan == "gameover":
                 self.show_gameover()
 
             self.window.blit(self.font.render(f'FPS: {self.zegar.get_fps()}', 1, (0,255,0)), (self.WIDTH - 200, 0))
             pygame.display.update()
+
 
     def update_game(self):
          self.player.move()
@@ -100,7 +120,6 @@ class Game():
 
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
 
-        napis = self.font.render("Shop", True, (0,0,0))
         self.player.draw_player()
 
         self.window.blit(wynik, (20, 20))
@@ -111,11 +130,29 @@ class Game():
         tytul = self.font_big.render("Save our school", True, (0, 0, 0))
         self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
 
-
         self.start_button.draw()
+    
+    def show_workshop(self):
+        self.window.blit(self.background_workshop, (0,0))
+
+        self.player.set_scale(2)
+        self.player.set_pos(800, 650, 'left')
+        self.player.draw_player()
+
+        self.right_button.draw()
+        self.left_button.draw()
+        self.go_button.draw()
+
     
     def show_end(self):
        pass 
+
+    def reset_lvl(self):
+        self.butelki = 0
+        self.trash_ar = []
+        for i in range(self.MAX_TRASH):
+           self.trash_ar.append(trashclass.Trash(self.window, self.WIDTH, self.HEIGHT)) 
+
 
     def show_gameover(self):
         self.butelki = 0
@@ -140,7 +177,6 @@ class Game():
         self.window.blit(napis3, (self.WIDTH // 2 - 250, self.HEIGHT / 2 + 70))
 
     def init_rectangles(self):
-        
         self.bad_rect = pygame.Rect(random.randint(0, self.WIDTH - 120), random.randint(-self.HEIGHT, 0), self.TRASH_WIDTH, self.TRASH_HEIGHT)
 
     def load_images(self):
@@ -148,7 +184,13 @@ class Game():
         self.background = pygame.transform.scale(self.background, (self.WIDTH, self.HEIGHT))
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
+        self.background_workshop = pygame.transform.scale(pygame.image.load("images/workshop.png"), (self.WIDTH, self.HEIGHT))
+
 
     def init_buttons(self):
         self.start_button = button.Button(self.window, pygame.Rect( self.WIDTH / 2 - 215, self.HEIGHT/2, 430, 117), "images/start.png")
-        self.shop_button = button.Button(self.window, pygame.Rect(0,0, 415, 105), 'images/shopnow.png')
+        self.go_button = button.Button(self.window, pygame.Rect(20,self.HEIGHT-170,306,260/2 ), 'images/GO.png')
+        self.left_button = button.Button(self.window, pygame.Rect(600,700, 66, 75), 'images/lewo.png')
+        self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
+
+    
