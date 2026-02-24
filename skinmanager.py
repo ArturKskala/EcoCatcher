@@ -35,5 +35,9 @@ class SkinManager():
     def get_current_skin(self):
         return self.skinlist[self.skinindex]
 
-    def unlock_skin(self, index):
-        self.skinlist[index]['unlocked'] = True
+    def unlock_skin(self, img_path):
+        try:
+            i = self.skinlist.index({'image': img_path, 'unlocked': False})
+            self.skinlist[i]['unlocked'] = True
+        except:
+            pass

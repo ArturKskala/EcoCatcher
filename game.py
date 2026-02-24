@@ -37,13 +37,14 @@ class Game():
 
         self.zegar = pygame.time.Clock()
 
+        self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
+
     def run(self):
         run = True
         while run:
             self.zegar.tick(60)
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     run = False
 
@@ -63,7 +64,7 @@ class Game():
                             if self.player.isUnlocked:
                                 self.reset_lvl()
                                 self.player.set_scale(1)
-                                self.stan = "opening"
+                                self.stan = "gra"
 
                         if self.left_button.isClicked():
                             self.skinManager.previuskin()
@@ -71,11 +72,18 @@ class Game():
                         if self.right_button.isClicked():
                             self.skinManager.nextskin()
                             self.player.set_skin(self.skinManager.get_current_skin())
+                        
+                        if self.create_button.isClicked():
+                            self.stan = 'opening'
+                
+                if self.stan == 'opening':
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        self.s.start_chest()
 
                 if self.stan == "gameover":
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         self.stan = "menu"
-                        butelki = 0
+                        self.butelki = 0
 
             # ===== MENU =====
             if self.stan == "menu":
@@ -86,13 +94,16 @@ class Game():
                 self.show_game()
             
             if self.stan == 'opening':
-                s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
-                s.run()
-                # opened skin = Skin Class
-                # state == 'workshop' 
+                result = self.s.run()
+                if result != None:
+                    print(result)
+                    self.skinManager.unlock_skin(result)
+                    self.stan = 'workshop'
+                    self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
 
             if self.stan == "workshop":
                 self.show_workshop()
+
             # ===== GAME OVER =====
             if self.stan == "gameover":
                 self.show_gameover()
@@ -146,6 +157,7 @@ class Game():
         self.right_button.draw()
         self.left_button.draw()
         self.go_button.draw()
+        self.create_button.draw()
 
     
     def show_end(self):
@@ -196,5 +208,5 @@ class Game():
         self.go_button = button.Button(self.window, pygame.Rect(20,self.HEIGHT-170,306,260/2 ), 'images/GO.png')
         self.left_button = button.Button(self.window, pygame.Rect(600,700, 66, 75), 'images/lewo.png')
         self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
-
+        self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-320,self.HEIGHT-384, 300, 374), 'images/ziutek.png')
     
