@@ -69,12 +69,19 @@ class Game():
                         if self.left_button.isClicked():
                             self.skinManager.previuskin()
                             self.player.set_skin(self.skinManager.get_current_skin())
+
                         if self.right_button.isClicked():
                             self.skinManager.nextskin()
                             self.player.set_skin(self.skinManager.get_current_skin())
                         
                         if self.create_button.isClicked():
                             self.stan = 'opening'
+                
+                if self.stan == 'gra':
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                       if self.workshop_button.isClicked():
+                           self.stan = 'workshop' 
+
                 
                 if self.stan == 'opening':
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -137,6 +144,7 @@ class Game():
 
         self.player.draw_player()
 
+        self.workshop_button.draw()
         self.window.blit(wynik, (20, 20))
 
     def show_menu(self):
@@ -209,4 +217,5 @@ class Game():
         self.left_button = button.Button(self.window, pygame.Rect(600,700, 66, 75), 'images/lewo.png')
         self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
         self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-320,self.HEIGHT-384, 300, 374), 'images/ziutek.png')
+        self.workshop_button = button.Button(self.window, pygame.Rect(self.WIDTH-320, self.HEIGHT-100, 300, 85), 'images/workshop_button.png')
     
