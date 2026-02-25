@@ -21,12 +21,14 @@ class Game():
         self.load_images()
         self.init_rectangles()
         self.init_buttons()
+        self.zegar = pygame.time.Clock()
+        self.font = pygame.font.SysFont(None, 50)
+        self.font_big = pygame.font.SysFont(None, 90)
 
         self.player = player.Player(self.window, self.WIDTH, self.HEIGHT)
-        self.skinManager = skinmanager.SkinManager()
+        self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
+        self.skinManager = skinmanager.SkinManager(self.s.get_skins_path())
 
-        self.font_big = pygame.font.SysFont(None, 90)
-        self.font = pygame.font.SysFont(None, 50)
 
         self.stan = "workshop"
         self.butelki = 0
@@ -36,9 +38,7 @@ class Game():
         for i in range(self.MAX_TRASH):
            self.trash_ar.append(trashclass.Trash(self.window, self.WIDTH, self.HEIGHT)) 
 
-        self.zegar = pygame.time.Clock()
 
-        self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
 
     def run(self):
         run = True

@@ -2,16 +2,33 @@ import pygame
 import random
 from PIL import Image
 
+GOLD = (255, 240, 200)
+PURPLE = (196, 174, 214)
+GREEN = (186, 255, 201)
+RED = (255, 179, 186)
 
 class Skrzynki():
+    def get_skins_path(self):
+        path = []
+        for s in self.skins_with_chances:
+            path.append(s['file'])
+        return path  
+
     def __init__(self, window, clock, font, big_font):
         self.skins_with_chances = [
-            {"file": "images/skins/gwagon.png", "chance": 1, "bg": (196, 174, 214), "name":"Dziełlo"},
-            {"file": "images/skins/red_bull_better1.png", "chance": 1, "bg": (255, 179, 186), "name":"Red Bull Better"},
-            {"file": "images/skins/terminator.png", "chance": 1, "bg": (255, 255, 204), "name":"Terminator"},
-            {"file": "images/skins/gold_robot.png", "chance": 1, "bg": (174, 198, 255), "name":"Złoty Robot"},
-            {"file": "images/skins/roboterasmus1.png", "chance": 1, "bg": (186, 255, 201), "name":"Roboterasmus"},
-            {"file": "images/skins/chat1.png", "chance": 1, "bg": (255, 240, 200), "name":"Chat"},
+            {"file": "images/skins/gwagon.png", "chance": 1, "bg": PURPLE },
+            {"file": "images/skins/red_bull_better1.png", "chance": 1, "bg": RED },
+            {"file": "images/skins/terminator.png", "chance": 1, "bg": GOLD },
+            {"file": "images/skins/gold_robot.png", "chance": 1, "bg": GREEN },
+            {"file": "images/skins/roboterasmus1.png", "chance": 1, "bg": GREEN  },
+            {"file": "images/skins/chat1.png", "chance": 1, "bg":  GOLD },
+            {"file": "images/skins/batman.png", "chance": 1, "bg": RED },
+            {"file": "images/skins/czolg.png", "chance": 1, "bg": PURPLE  },
+            {"file": "images/skins/mario.png", "chance": 1, "bg": GREEN  },
+            {"file": "images/skins/smerf.png", "chance": 1, "bg": GOLD  }, 
+            {"file": "images/skins/steve.png", "chance": 1, "bg": PURPLE  },
+            {"file": "images/skins/walter.png", "chance": 1, "bg": GOLD },
+            {"file": "images/skins/zygzak.png", "chance": 1, "bg": PURPLE } 
         ]
 
         info = pygame.display.Info()
