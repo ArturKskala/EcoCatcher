@@ -6,6 +6,8 @@ import button
 import skinmanager
 import skrzynki
 
+SKIN_CASE_COST = 2
+
 class Game():
     def __init__(self):
         info = pygame.display.Info()
@@ -30,7 +32,7 @@ class Game():
         self.skinManager = skinmanager.SkinManager(self.s.get_skins_path())
 
 
-        self.stan = "workshop"
+        self.stan = "menu"
         self.butelki = 0
         self.money = 0.0
 
@@ -58,7 +60,7 @@ class Game():
                         if self.start_button.isClicked():
                             self.reset_lvl()
                             self.butelki = 0
-                            self.stan = "gra"
+                            self.stan = "workshop"
                 
                 if self.stan == "workshop":
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -77,7 +79,10 @@ class Game():
                             self.player.set_skin(self.skinManager.get_current_skin())
                         
                         if self.create_button.isClicked():
-                            self.stan = 'opening'
+                            if self.money >= SKIN_CASE_COST:
+                                self.money -= SKIN_CASE_COST
+                                self.money = round(self.money, 1)
+                                self.stan = 'opening'
                         
                         if self.butelkomat_button.isClicked():
                             self.exchange()
@@ -94,7 +99,7 @@ class Game():
 
                 if self.stan == "gameover":
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        self.stan = "menu"
+                        self.stan = "workshop"
                         self.butelki = 0
 
             # ===== MENU =====
@@ -172,9 +177,13 @@ class Game():
         self.create_button.draw()
         self.butelkomat_button.draw()
 
+
+
         pygame.draw.rect(self.window, (59,155,63), (0,0,250,120))
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
-        m = self.font.render("Money: " + str(self.money), True, (0,0,0))
+        m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
+        c = self.font.render(str(SKIN_CASE_COST)+'.00€', True, (0,0,0))
+        self.window.blit(c, (1550,620))
         self.window.blit(wynik, (20, 20))
         self.window.blit(m, (20, 60))
     
@@ -225,11 +234,11 @@ class Game():
         self.go_button = button.Button(self.window, pygame.Rect(20,self.HEIGHT-170,306,260/2 ), 'images/GO.png')
         self.left_button = button.Button(self.window, pygame.Rect(600,700, 66, 75), 'images/lewo.png')
         self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
-        self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-320,self.HEIGHT-384, 300, 374), 'images/ziutek.png')
+        self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-500,self.HEIGHT-571, 500, 571), 'images/ziutek.png')
         self.workshop_button = button.Button(self.window, pygame.Rect(self.WIDTH-320, self.HEIGHT-100, 300, 85), 'images/workshop_button.png')
         self.butelkomat_button = button.Button(self.window, pygame.Rect(0,self.HEIGHT-732, 408, 612), 'images/Butelkomat.png')
     
     def exchange(self):
         self.money += self.butelki*0.2
-        self.money = round(self.money, 2)
+        self.money = round(self.money, 1)
         self.butelki = 0
