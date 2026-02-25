@@ -8,8 +8,9 @@ import skrzynki
 
 class Game():
     def __init__(self):
-        self.WIDTH = 1920
-        self.HEIGHT = 1080
+        info = pygame.display.Info()
+        self.WIDTH = info.current_w
+        self.HEIGHT = info.current_h
         self.MAX_TRASH = 5
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
@@ -21,7 +22,6 @@ class Game():
         self.init_rectangles()
         self.init_buttons()
 
-
         self.player = player.Player(self.window, self.WIDTH, self.HEIGHT)
         self.skinManager = skinmanager.SkinManager()
 
@@ -30,6 +30,7 @@ class Game():
 
         self.stan = "workshop"
         self.butelki = 0
+        self.money = 0.0
 
         self.trash_ar = []
         for i in range(self.MAX_TRASH):
@@ -56,6 +57,7 @@ class Game():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.start_button.isClicked():
                             self.reset_lvl()
+                            self.butelki = 0
                             self.stan = "gra"
                 
                 if self.stan == "workshop":
@@ -76,6 +78,9 @@ class Game():
                         
                         if self.create_button.isClicked():
                             self.stan = 'opening'
+                        
+                        if self.butelkomat_button.isClicked():
+                            self.exchange()
                 
                 if self.stan == 'gra':
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -103,7 +108,6 @@ class Game():
             if self.stan == 'opening':
                 result = self.s.run()
                 if result != None:
-                    print(result)
                     self.skinManager.unlock_skin(result)
                     self.stan = 'workshop'
                     self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
@@ -166,13 +170,18 @@ class Game():
         self.left_button.draw()
         self.go_button.draw()
         self.create_button.draw()
+        self.butelkomat_button.draw()
 
+        pygame.draw.rect(self.window, (59,155,63), (0,0,250,120))
+        wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
+        m = self.font.render("Money: " + str(self.money), True, (0,0,0))
+        self.window.blit(wynik, (20, 20))
+        self.window.blit(m, (20, 60))
     
     def show_end(self):
        pass 
 
     def reset_lvl(self):
-        self.butelki = 0
         self.trash_ar = []
         for i in range(self.MAX_TRASH):
            self.trash_ar.append(trashclass.Trash(self.window, self.WIDTH, self.HEIGHT)) 
@@ -218,4 +227,9 @@ class Game():
         self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
         self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-320,self.HEIGHT-384, 300, 374), 'images/ziutek.png')
         self.workshop_button = button.Button(self.window, pygame.Rect(self.WIDTH-320, self.HEIGHT-100, 300, 85), 'images/workshop_button.png')
+        self.butelkomat_button = button.Button(self.window, pygame.Rect(0,self.HEIGHT-732, 408, 612), 'images/Butelkomat.png')
     
+    def exchange(self):
+        self.money += self.butelki*0.2
+        self.money = round(self.money, 2)
+        self.butelki = 0

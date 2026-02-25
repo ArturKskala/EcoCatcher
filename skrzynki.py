@@ -24,7 +24,6 @@ class Skrzynki():
         self.center_x = self.WIDTH / 2
         self.center_y = self.HEIGHT / 2
 
-
         # ================== GIF SKRZYNKI =====================
         self.CHEST_SIZE = 400
         gif = Image.open("images/chest.gif")
