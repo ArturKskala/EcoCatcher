@@ -9,6 +9,7 @@ class Player():
         self.window = window
         self.player_width = 549/2.5
         self.player_height = 379/2.5
+        self.speed = 10
 
         self.dir = 'left' # 'right'
         self.rect = pygame.Rect(0, self.HEIGHT - 200, self.player_width, self.player_height)
@@ -57,15 +58,15 @@ class Player():
         klawisze = pygame.key.get_pressed()
 
         if klawisze[pygame.K_LEFT] or klawisze[pygame.K_a]:
-            self.rect.x -= 20
+            self.rect.x -= self.speed
             self.dir = 'left'
         if klawisze[pygame.K_RIGHT] or klawisze[pygame.K_d]:
-            self.rect.x += 20
+            self.rect.x += self.speed
             self.dir = 'right'
         if klawisze[pygame.K_UP] or klawisze[pygame.K_w]:
-            self.rect.y -= 20
+            self.rect.y -= self.speed
         if klawisze[pygame.K_DOWN] or klawisze[pygame.K_s]:
-            self.rect.y += 20
+            self.rect.y += self.speed
 
 
         if self.rect.x < 0:

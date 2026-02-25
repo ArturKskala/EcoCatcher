@@ -1,4 +1,5 @@
 import pygame
+import sys
 import random
 import trashclass
 import player
@@ -16,6 +17,7 @@ class Game():
         self.MAX_TRASH = 5
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
+        self.lives = 5
 
         self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
         pygame.display.set_caption("EcoCatcher")
@@ -30,7 +32,6 @@ class Game():
         self.player = player.Player(self.window, self.WIDTH, self.HEIGHT)
         self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
         self.skinManager = skinmanager.SkinManager(self.s.get_skins_path())
-
 
         self.stan = "menu"
         self.butelki = 0
@@ -99,8 +100,7 @@ class Game():
 
                 if self.stan == "gameover":
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        self.stan = "workshop"
-                        self.butelki = 0
+                        sys.exit()
 
             # ===== MENU =====
             if self.stan == "menu":
@@ -139,7 +139,9 @@ class Game():
                 self.trash_ar.remove(trash)
                 self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
                 if trash.isBad:
-                    self.stan = 'gameover'
+                    self.lives -= 1
+                    if self.lives <= 0:
+                        self.stan = 'gameover'
                 else:
                     self.butelki += 1
 
@@ -150,16 +152,21 @@ class Game():
             trash.draw()
 
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
+        l = self.font.render('Lives: ' + str(self.lives), True, (0, 0, 0))
+        m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
 
         self.player.draw_player()
+        pygame.draw.rect(self.window, (59,155,63), (0,0,250,150))
 
         self.workshop_button.draw()
         self.window.blit(wynik, (20, 20))
+        self.window.blit(m, (20, 100))
+        self.window.blit(l, (20, 60))
 
     def show_menu(self):
-        self.window.blit(self.background, (0, 0))
+        self.window.blit(self.backgorund_menu, (0, 0))
 
-        tytul = self.font_big.render("Save our school", True, (0, 0, 0))
+        tytul = self.font_big.render("Save our school", True, (255, 255, 255))
         self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
 
         self.start_button.draw()
@@ -177,15 +184,16 @@ class Game():
         self.create_button.draw()
         self.butelkomat_button.draw()
 
-
-
-        pygame.draw.rect(self.window, (59,155,63), (0,0,250,120))
+        pygame.draw.rect(self.window, (59,155,63), (0,0,250,150))
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
         m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
+        l = self.font.render('Lives: ' + str(self.lives), True, (0, 0, 0))
+        self.window.blit(l, (20, 60))
         c = self.font.render(str(SKIN_CASE_COST)+'.00€', True, (0,0,0))
         self.window.blit(c, (1550,620))
         self.window.blit(wynik, (20, 20))
-        self.window.blit(m, (20, 60))
+        self.window.blit(l, (20, 60))
+        self.window.blit(m, (20, 100))
     
     def show_end(self):
        pass 
@@ -215,7 +223,7 @@ class Game():
         napis2 = self.font.render(tekst, True, (255, 255, 255))
         self.window.blit(napis2, (self.WIDTH // 2 - 400, self.HEIGHT // 2))
 
-        napis3 = self.font.render("Click to go back to menu", True, (255, 255, 255))
+        napis3 = self.font.render("Click to go exit", True, (255, 255, 255))
         self.window.blit(napis3, (self.WIDTH // 2 - 250, self.HEIGHT / 2 + 70))
 
     def init_rectangles(self):
@@ -227,6 +235,8 @@ class Game():
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
         self.background_workshop = pygame.transform.scale(pygame.image.load("images/workshop.png"), (self.WIDTH, self.HEIGHT))
+        self.backgorund_menu = pygame.image.load("images/menu_glowne.png")
+        self.backgorund_menu = pygame.transform.scale(self.backgorund_menu, (self.WIDTH, self.HEIGHT))
 
 
     def init_buttons(self):
