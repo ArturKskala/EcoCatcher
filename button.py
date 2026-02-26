@@ -25,3 +25,8 @@ class Button():
                 pygame.draw.rect(self.window, color, self.rect)
             else:
                 raise Exception("No Color")
+
+    def set_img(self, img_path):
+        self.isImage = True
+        self.img = pygame.image.load(img_path)
+        self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))

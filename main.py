@@ -1,3 +1,4 @@
+# GIERKA
 import game
 import pygame
 

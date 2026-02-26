@@ -8,6 +8,25 @@ import skinmanager
 import skrzynki
 
 SKIN_CASE_COST = 2
+SPEED_UPGRADE_COST = 25*0.2
+ADD_LIVE_UPGRADE_COST = 50*0.2
+AI_RESEARCH_COST = [
+        10*0.2,
+        20*0.2,
+        30*0.2,
+        40*0.2,
+        50*0.2
+        ]
+AI_IMAGES = [
+        'images/ai/lvl1.png',
+        'images/ai/lvl2.png',
+        'images/ai/lvl3.png',
+        'images/ai/lvl4.png',
+        'images/ai/lvl5.png',
+        ]
+
+WIN_MAIN_STR = 'CONGRATULATION'
+WIN_STR = 'You\'ve reasearch enough Ai, that now collects bottles on it own!'
 
 class Game():
     def __init__(self):
@@ -18,6 +37,7 @@ class Game():
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
         self.lives = 5
+        self.ai_research = 0
 
         self.window = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.FULLSCREEN)
         pygame.display.set_caption("EcoCatcher")
@@ -87,7 +107,29 @@ class Game():
                         
                         if self.butelkomat_button.isClicked():
                             self.exchange()
+
+                        if self.speed_button.isClicked():
+                            if self.money >= SPEED_UPGRADE_COST:
+                                self.money -= SPEED_UPGRADE_COST
+                                self.money = round(self.money, 1)
+                                self.player.speed += 5
                 
+                        if self.life_button.isClicked():
+                            if self.money >= ADD_LIVE_UPGRADE_COST:
+                                self.money -= ADD_LIVE_UPGRADE_COST
+                                self.money = round(self.money, 1)
+                                self.lives += 1
+
+                        if self.ai_button.isClicked():
+                            if self.money >= AI_RESEARCH_COST[self.ai_research]:
+                                self.money -= AI_RESEARCH_COST[self.ai_research]
+                                self.money = round(self.money, 1)
+                                self.ai_research += 1
+                                if self.ai_research >= 5:
+                                    self.stan = 'win'
+                                else:
+                                    self.ai_button.set_img(AI_IMAGES[self.ai_research])
+
                 if self.stan == 'gra':
                     if event.type == pygame.MOUSEBUTTONDOWN:
                        if self.workshop_button.isClicked():
@@ -99,6 +141,10 @@ class Game():
                         self.s.start_chest()
 
                 if self.stan == "gameover":
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        sys.exit()
+
+                if self.stan == 'win':
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         sys.exit()
 
@@ -124,7 +170,10 @@ class Game():
             if self.stan == "gameover":
                 self.show_gameover()
 
-            self.window.blit(self.font.render(f'FPS: {self.zegar.get_fps()}', 1, (0,255,0)), (self.WIDTH - 200, 0))
+            if self.stan == 'win':
+                self.show_win()
+
+#            self.window.blit(self.font.render(f'FPS: {self.zegar.get_fps()}', 1, (0,255,0)), (self.WIDTH - 200, 0))
             pygame.display.update()
 
 
@@ -144,6 +193,7 @@ class Game():
                         self.stan = 'gameover'
                 else:
                     self.butelki += 1
+
 
 
     def show_game(self):
@@ -178,34 +228,54 @@ class Game():
         self.player.set_pos(800, 650, 'left')
         self.player.draw_player()
 
+        pygame.draw.rect(self.window, (59,155,63), (self.WIDTH-440, 0, 440, 500)) 
+
         self.right_button.draw()
         self.left_button.draw()
         self.go_button.draw()
         self.create_button.draw()
         self.butelkomat_button.draw()
+        self.speed_button.draw()
+        self.life_button.draw()
+        self.ai_button.draw()
 
-        pygame.draw.rect(self.window, (59,155,63), (0,0,250,150))
+        pygame.draw.rect(self.window, (59,155,63), (0,0,300,150))
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
         m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
         l = self.font.render('Lives: ' + str(self.lives), True, (0, 0, 0))
-        self.window.blit(l, (20, 60))
         c = self.font.render(str(SKIN_CASE_COST)+'.00€', True, (0,0,0))
+        ai_cost = self.font.render(str(AI_RESEARCH_COST[self.ai_research]) + '0€', True, (0,0,0))
+        speed_cost = self.font.render(str(SPEED_UPGRADE_COST)+'0€', True, (0,0,0))
+        live_cost = self.font.render(str(ADD_LIVE_UPGRADE_COST)+'0€', True, (0,0,0))
+        
+        
+        self.window.blit(speed_cost, (self.WIDTH - 420,100 - speed_cost.get_height()/2))
+        self.window.blit(live_cost, (self.WIDTH - 420 ,250 - live_cost.get_height()/2))
+        self.window.blit(ai_cost, (self.WIDTH - 420,400 - ai_cost.get_height()/2))
+
         self.window.blit(c, (1550,620))
         self.window.blit(wynik, (20, 20))
         self.window.blit(l, (20, 60))
         self.window.blit(m, (20, 100))
     
-    def show_end(self):
-       pass 
-
     def reset_lvl(self):
         self.trash_ar = []
         for i in range(self.MAX_TRASH):
            self.trash_ar.append(trashclass.Trash(self.window, self.WIDTH, self.HEIGHT)) 
 
+    def show_win(self):
+        self.window.blit(self.backgorund_win, (0,0))
+
+        cień = self.font_big.render(WIN_MAIN_STR, True, (0, 0, 0))
+        self.window.blit(cień, (self.WIDTH / 2 - cień.get_width()/2 + 3, self.HEIGHT / 3 + 3))
+
+        napis1 = self.font_big.render(WIN_MAIN_STR, True, (0, 255, 0))
+        self.window.blit(napis1, (self.WIDTH / 2 - cień.get_width()/2, self.HEIGHT / 3))
+
+        napis3 = self.font.render(WIN_STR, True, (255, 255, 255))
+        self.window.blit(napis3, (self.WIDTH / 2 - napis3.get_width()/2, self.HEIGHT / 2  - napis3.get_height()/2))
 
     def show_gameover(self):
-        self.butelki = 0
         self.window.blit(self.background_gameover, (0, 0))
 
         # GAME OVER z cieniem
@@ -230,13 +300,15 @@ class Game():
         self.bad_rect = pygame.Rect(random.randint(0, self.WIDTH - 120), random.randint(-self.HEIGHT, 0), self.TRASH_WIDTH, self.TRASH_HEIGHT)
 
     def load_images(self):
-        self.background = pygame.image.load("images/hol.jpeg")
+        self.background = pygame.image.load("images/hol.png")
         self.background = pygame.transform.scale(self.background, (self.WIDTH, self.HEIGHT))
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
         self.background_workshop = pygame.transform.scale(pygame.image.load("images/workshop.png"), (self.WIDTH, self.HEIGHT))
         self.backgorund_menu = pygame.image.load("images/menu_glowne.png")
         self.backgorund_menu = pygame.transform.scale(self.backgorund_menu, (self.WIDTH, self.HEIGHT))
+        self.backgorund_win = pygame.image.load("images/win.png")
+        self.backgorund_win = pygame.transform.scale(self.backgorund_win, (self.WIDTH, self.HEIGHT))
 
 
     def init_buttons(self):
@@ -247,6 +319,9 @@ class Game():
         self.create_button = button.Button(self.window, pygame.Rect(self.WIDTH-500,self.HEIGHT-571, 500, 571), 'images/ziutek.png')
         self.workshop_button = button.Button(self.window, pygame.Rect(self.WIDTH-320, self.HEIGHT-100, 300, 85), 'images/workshop_button.png')
         self.butelkomat_button = button.Button(self.window, pygame.Rect(0,self.HEIGHT-732, 408, 612), 'images/Butelkomat.png')
+        self.speed_button = button.Button(self.window, pygame.Rect(self.WIDTH - 300, 50, 242, 100), 'images/upgrade.png')
+        self.life_button = button.Button(self.window, pygame.Rect(self.WIDTH - 300, 200, 242, 100), 'images/add_life.png')
+        self.ai_button = button.Button(self.window, pygame.Rect(self.WIDTH - 300, 350, 242, 100), AI_IMAGES[0])
     
     def exchange(self):
         self.money += self.butelki*0.2
