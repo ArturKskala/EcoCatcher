@@ -5,7 +5,7 @@ import random
 # self.smiec3_img = pygame.transform.scale(self.smiec2_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
 # self.zly_smiec_img = pygame.transform.scale(self.zly_smiec_img, (self.TRASH_WIDTH, self.TRASH_HEIGHT))
 
-TRASH_CHANCE = 1 # 1/TRASH_CHANCE
+TRASH_CHANCE = 3 # 1/TRASH_CHANCE
 good_imges = [
     "images/smiec4.png",
     "images/smiec2.png",
@@ -26,7 +26,7 @@ class Trash():
         self.HEIGHT = HEIGHT
         self.speed = random.randint(5,10) 
         
-        if random.randint(0,TRASH_CHANCE) == 1:
+        if random.randint(0,TRASH_CHANCE) == 0:
             path = random.choice(bad_images)
             self.isBad = True 
         else:
