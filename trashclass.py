@@ -9,7 +9,8 @@ TRASH_CHANCE = 1 # 1/TRASH_CHANCE
 good_imges = [
     "images/smiec4.png",
     "images/smiec2.png",
-    "images/smiec3.png"
+    "images/butelka.png",
+    "images/cisowianka.png"
 ]
 
 bad_images = [
