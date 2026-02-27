@@ -22,6 +22,7 @@ class Trash():
         self.window = window
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
+        self.speed = random.randint(5,10) 
         
         if random.randint(0,1) == 1:
             path = random.choice(bad_images)
@@ -39,7 +40,7 @@ class Trash():
         self.hibox = pygame.Rect(x, y, TRASH_WIDTH-30, TRASH_HEIGHT-10)
 
     def update(self):
-        self.rect.y += 6
+        self.rect.y += self.speed
         self.hibox.center = self.rect.center
 
     def draw(self):

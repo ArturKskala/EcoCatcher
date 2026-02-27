@@ -90,9 +90,10 @@ class Skrzynki():
         for s in self.skins_with_chances:
             s["original_img"] = pygame.image.load(s["file"]).convert_alpha()
             img = pygame.transform.scale(s["original_img"], (self.SKIN_SIZE, self.SKIN_SIZE))
-            bg_surface = pygame.Surface((self.SKIN_SIZE, self.SKIN_SIZE))
-            bg_surface.fill(s["bg"])
-            bg_surface.blit(img, (0,0))
+            bg_surface = pygame.Surface((self.SKIN_SIZE+10, self.SKIN_SIZE+10))
+            bg_surface.fill((40,40,70))
+            pygame.draw.rect(bg_surface, s["bg"], (0,0,self.SKIN_SIZE+10, self.SKIN_SIZE+10), border_radius=10)
+            bg_surface.blit(img, (5,5))
             s["img"] = bg_surface
 
     def choose_skin(self):
@@ -176,14 +177,14 @@ class Skrzynki():
             self.scroll_x = self.start_scroll + (self.target_scroll-self.start_scroll)*self.ease_out_cubic(t)
 
             panel_rect = pygame.Rect(0, self.HEIGHT//2 - 120, self.WIDTH, 240)
-            pygame.draw.rect(self.window,(40,40,70),panel_rect)
+            pygame.draw.rect(self.window,(40,40,70),panel_rect) # tylni panel
             pygame.draw.rect(self.window,(255,215,0),(self.center_x-3, self.HEIGHT//2-130,6,260))
 
             start_x = self.center_x - self.scroll_x
             for i, skin in enumerate(self.roll_skins):
                 x = start_x + i*(self.SKIN_SIZE+self.SPACE)
                 y = self.HEIGHT//2 - self.SKIN_SIZE//2
-                pygame.draw.rect(self.window,(60,60,95),(x-10,y-10,self.SKIN_SIZE+20,self.SKIN_SIZE+20),border_radius=8)
+                #pygame.draw.rect(self.window,(60,60,95),(x-10,y-10,self.SKIN_SIZE+20,self.SKIN_SIZE+20),border_radius=8)
                 self.window.blit(skin,(x,y))
 
             if t>=1:

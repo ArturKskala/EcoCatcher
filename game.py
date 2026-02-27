@@ -7,15 +7,16 @@ import button
 import skinmanager
 import skrzynki
 
+EXCHANGE_RATE = 0.2
 SKIN_CASE_COST = 2
-SPEED_UPGRADE_COST = 25*0.2
-ADD_LIVE_UPGRADE_COST = 50*0.2
+SPEED_UPGRADE_COST = 25*EXCHANGE_RATE
+ADD_LIVE_UPGRADE_COST = 50*EXCHANGE_RATE
 AI_RESEARCH_COST = [
-        10*0.2,
-        20*0.2,
-        30*0.2,
-        40*0.2,
-        50*0.2
+        10*EXCHANGE_RATE,
+        20*EXCHANGE_RATE,
+        30*EXCHANGE_RATE,
+        40*EXCHANGE_RATE,
+        50*EXCHANGE_RATE
         ]
 AI_IMAGES = [
         'images/ai/lvl1.png',
@@ -33,7 +34,7 @@ class Game():
         info = pygame.display.Info()
         self.WIDTH = info.current_w
         self.HEIGHT = info.current_h
-        self.MAX_TRASH = 5
+        self.MAX_TRASH = 15 
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
         self.lives = 5
@@ -55,7 +56,7 @@ class Game():
 
         self.stan = "menu"
         self.butelki = 0
-        self.money = 0.0
+        self.money = 100.0
 
         self.trash_ar = []
         for i in range(self.MAX_TRASH):
@@ -145,8 +146,9 @@ class Game():
                         sys.exit()
 
                 if self.stan == 'win':
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        sys.exit()
+                    # if event.type == pygame.MOUSEBUTTONDOWN:
+                    pass
+                    #     sys.exit()
 
             # ===== MENU =====
             if self.stan == "menu":
@@ -206,7 +208,7 @@ class Game():
         m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
 
         self.player.draw_player()
-        pygame.draw.rect(self.window, (59,155,63), (0,0,250,150))
+        pygame.draw.rect(self.window, (59,155,63), (0,0,300,150))
 
         self.workshop_button.draw()
         self.window.blit(wynik, (20, 20))
@@ -280,27 +282,27 @@ class Game():
 
         # GAME OVER z cieniem
         cień = self.font_big.render("GAME OVER", True, (0, 0, 0))
-        self.window.blit(cień, (self.WIDTH / 2 - 250 + 3, self.HEIGHT / 3 + 3))
+        self.window.blit(cień, (self.WIDTH / 2 - cień.get_width()/2 + 3, self.HEIGHT / 3 + 3))
 
         napis1 = self.font_big.render("GAME OVER", True, (255, 0, 0))
-        self.window.blit(napis1, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
+        self.window.blit(napis1, (self.WIDTH / 2 - napis1.get_width()/2, self.HEIGHT / 3))
 
         # WRÓCONY NAPIS ZSiPO
         tekst = "Beacause of you the school is covered in trash"
         cień2 = self.font.render(tekst, True, (0, 0, 0))
-        self.window.blit(cień2, (self.WIDTH // 2 - 400 + 2, self.HEIGHT // 2 + 2))
+        self.window.blit(cień2, (self.WIDTH / 2 - cień2.get_width()/2 + 2, self.HEIGHT // 2 + 2))
 
         napis2 = self.font.render(tekst, True, (255, 255, 255))
-        self.window.blit(napis2, (self.WIDTH // 2 - 400, self.HEIGHT // 2))
+        self.window.blit(napis2, (self.WIDTH / 2 - napis2.get_width()/2, self.HEIGHT // 2))
 
         napis3 = self.font.render("Click to go exit", True, (255, 255, 255))
-        self.window.blit(napis3, (self.WIDTH // 2 - 250, self.HEIGHT / 2 + 70))
+        self.window.blit(napis3, (self.WIDTH / 2 - napis3.get_width()/2, self.HEIGHT / 2 + 70))
 
     def init_rectangles(self):
         self.bad_rect = pygame.Rect(random.randint(0, self.WIDTH - 120), random.randint(-self.HEIGHT, 0), self.TRASH_WIDTH, self.TRASH_HEIGHT)
 
     def load_images(self):
-        self.background = pygame.image.load("images/hol.png")
+        self.background = pygame.image.load("images/hol.jpg")
         self.background = pygame.transform.scale(self.background, (self.WIDTH, self.HEIGHT))
         self.background_gameover = pygame.image.load("images/gameover.png")
         self.background_gameover = pygame.transform.scale(self.background_gameover, (self.WIDTH, self.HEIGHT))
@@ -324,6 +326,6 @@ class Game():
         self.ai_button = button.Button(self.window, pygame.Rect(self.WIDTH - 300, 350, 242, 100), AI_IMAGES[0])
     
     def exchange(self):
-        self.money += self.butelki*0.2
+        self.money += self.butelki*EXCHANGE_RATE
         self.money = round(self.money, 1)
         self.butelki = 0
