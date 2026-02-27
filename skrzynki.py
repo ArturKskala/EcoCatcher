@@ -7,6 +7,10 @@ PURPLE = (196, 174, 214)
 GREEN = (186, 255, 201)
 RED = (255, 179, 186)
 
+GOLD_CHANCE = 1
+RED_CHANCE = 2
+PURPLE_CHANCE = 3
+GREEN_CHANCE = 4 
 class Skrzynki():
     def get_skins_path(self):
         path = []
@@ -16,19 +20,22 @@ class Skrzynki():
 
     def __init__(self, window, clock, font, big_font):
         self.skins_with_chances = [
-            {"file": "images/skins/gwagon.png", "chance": 1, "bg": PURPLE },
-            {"file": "images/skins/gold_robot.png", "chance": 1, "bg": GREEN },
-            {"file": "images/skins/roboterasmus1.png", "chance": 1, "bg": GREEN  },
-            {"file": "images/skins/red_bull_better1.png", "chance": 1, "bg": RED },
-            {"file": "images/skins/chat1.png", "chance": 1, "bg":  GOLD },
-            {"file": "images/skins/terminator.png", "chance": 1, "bg": GOLD },
-            {"file": "images/skins/batman.png", "chance": 1, "bg": RED },
-            {"file": "images/skins/czolg.png", "chance": 1, "bg": PURPLE  },
-            {"file": "images/skins/mario.png", "chance": 1, "bg": GREEN  },
-            {"file": "images/skins/steve.png", "chance": 1, "bg": PURPLE  },
-            {"file": "images/skins/zygzak.png", "chance": 1, "bg": PURPLE },
-            {"file": "images/skins/smerf.png", "chance": 1, "bg": GOLD  }, 
-            {"file": "images/skins/walter.png", "chance": 1, "bg": GOLD },
+            {"file": "images/skins/gwagon.png", "chance": PURPLE_CHANCE, "bg": PURPLE },
+            {"file": "images/skins/gold_robot.png", "chance": GREEN_CHANCE, "bg": GREEN },
+            {"file": "images/skins/roboterasmus1.png", "chance": GREEN_CHANCE, "bg": GREEN  },
+            {"file": "images/skins/red_bull_better1.png", "chance": RED_CHANCE, "bg": RED },
+            {"file": "images/skins/chat1.png", "chance": GOLD_CHANCE, "bg":  GOLD },
+            {"file": "images/skins/terminator.png", "chance": GOLD_CHANCE, "bg": GOLD },
+            {"file": "images/skins/batman.png", "chance": RED_CHANCE, "bg": RED },
+            {"file": "images/skins/czolg.png", "chance": PURPLE_CHANCE, "bg": PURPLE  },
+            {"file": "images/skins/mario.png", "chance": GREEN_CHANCE, "bg": GREEN  },
+            {"file": "images/skins/steve.png", "chance": PURPLE_CHANCE, "bg": PURPLE  },
+            {"file": "images/skins/zygzak.png", "chance": PURPLE_CHANCE, "bg": PURPLE },
+            {"file": "images/skins/spongbob.png", "chance": GREEN_CHANCE, "bg": GREEN },
+            {"file": "images/skins/scooby.png", "chance": PURPLE_CHANCE, "bg": PURPLE },
+            {"file": "images/skins/harry.png", "chance": RED_CHANCE, "bg": RED },
+            {"file": "images/skins/smerf.png", "chance": GOLD_CHANCE, "bg": GOLD  }, 
+            {"file": "images/skins/walter.png", "chance": GOLD_CHANCE, "bg": GOLD },
         ]
 
         info = pygame.display.Info()

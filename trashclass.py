@@ -10,7 +10,9 @@ good_imges = [
     "images/smiec4.png",
     "images/smiec2.png",
     "images/butelka.png",
-    "images/cisowianka.png"
+    "images/butelka2.png",
+    "images/cisowianka.png",
+#    "images/zubr.png"
 ]
 
 bad_images = [
