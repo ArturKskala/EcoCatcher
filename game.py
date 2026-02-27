@@ -79,6 +79,10 @@ class Game():
                     if event.key == pygame.K_m:
                         self.money += 100
 
+                    if event.key == pygame.K_u:
+                        self.skinManager.unlock_current_skin()
+                        self.player.set_skin(self.skinManager.get_current_skin())
+
                 if self.stan == "menu":
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.start_button.isClicked():
@@ -87,6 +91,7 @@ class Game():
                             self.stan = "workshop"
                 
                 if self.stan == "workshop":
+
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.go_button.isClicked():
                             if self.player.isUnlocked:
@@ -164,6 +169,7 @@ class Game():
                 result = self.s.run()
                 if result != None:
                     self.skinManager.unlock_skin(result)
+                    self.player.set_skin(self.skinManager.get_current_skin())
                     self.stan = 'workshop'
                     self.s = skrzynki.Skrzynki(self.window,self.zegar, self.font, self.font_big)
 

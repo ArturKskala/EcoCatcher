@@ -25,6 +25,9 @@ class SkinManager():
 
     def get_current_skin(self):
         return self.skinlist[self.skinindex]
+    
+    def unlock_current_skin(self):
+        self.skinlist[self.skinindex]['unlocked'] = True
 
     def unlock_skin(self, img_path):
         try:
