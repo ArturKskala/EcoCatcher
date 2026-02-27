@@ -4,4 +4,5 @@ xcopy /e /k /h /i images\ dist\images\
 ren "dist" "Eco Catcher"
 cd "Eco Catcher"
 ren main.exe EcoCatcher.exe
+cd ..
 pause
