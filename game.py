@@ -239,6 +239,7 @@ class Game():
         # self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
 
         self.start_button.draw()
+        self.draw_credits()
     
     def show_workshop(self):
         self.window.blit(self.background_workshop, (0,0))
@@ -346,3 +347,31 @@ class Game():
         self.money += self.butelki*EXCHANGE_RATE
         self.money = round(self.money, 1)
         self.butelki = 0
+
+    def draw_credits(self):
+        Credits = ['Authors:',
+                   'Artur K.', 
+                   'Igor C.', 
+                   'Janek K.',
+                   'Kacper N.', 
+                   'Łukasz Z.']
+        fonts = []
+        w = 0
+        h = 0
+        for c in Credits:
+            f = self.font.render(c, True, (0,0,0))
+            fonts.append(f)
+            h += f.get_height()
+            if w < f.get_width():
+                w = f.get_width()
+
+        x = 1700 
+        start_y = self.HEIGHT/2 - 160
+
+        rect = pygame.Rect(x-w/2-30,start_y-30,w+60,h+150)
+        pygame.draw.rect(self.window, (146,179,34), rect, border_radius=10)
+
+
+        for f in fonts:
+            self.window.blit(f, (x - f.get_width()/2, start_y))
+            start_y += 50
