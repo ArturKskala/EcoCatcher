@@ -9,8 +9,8 @@ import skrzynki
 
 EXCHANGE_RATE = 0.2
 SKIN_CASE_COST = 10*EXCHANGE_RATE 
-SPEED_UPGRADE_COST = 25*EXCHANGE_RATE
-ADD_LIVE_UPGRADE_COST = 50*EXCHANGE_RATE
+SPEED_UPGRADE_COST = 50*EXCHANGE_RATE
+ADD_LIVE_UPGRADE_COST = 25*EXCHANGE_RATE
 AI_RESEARCH_COST = [
         10*EXCHANGE_RATE,
         20*EXCHANGE_RATE,
@@ -91,6 +91,15 @@ class Game():
                             self.stan = "workshop"
                 
                 if self.stan == "workshop":
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            self.skinManager.previuskin()
+                            self.player.set_skin(self.skinManager.get_current_skin())
+
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_RIGHT:
+                            self.skinManager.nextskin()
+                            self.player.set_skin(self.skinManager.get_current_skin())
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.go_button.isClicked():
