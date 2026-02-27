@@ -8,7 +8,7 @@ import skinmanager
 import skrzynki
 
 EXCHANGE_RATE = 0.2
-SKIN_CASE_COST = 2
+SKIN_CASE_COST = 10*EXCHANGE_RATE 
 SPEED_UPGRADE_COST = 25*EXCHANGE_RATE
 ADD_LIVE_UPGRADE_COST = 50*EXCHANGE_RATE
 AI_RESEARCH_COST = [
@@ -31,10 +31,11 @@ WIN_STR = 'You\'ve reasearch enough Ai, that now collects bottles on it own!'
 
 class Game():
     def __init__(self):
+        self.money = 0.0
+        self.MAX_TRASH = 10 
         info = pygame.display.Info()
         self.WIDTH = info.current_w
         self.HEIGHT = info.current_h
-        self.MAX_TRASH = 15 
         self.TRASH_WIDTH = 120
         self.TRASH_HEIGHT = 120
         self.lives = 5
@@ -56,7 +57,6 @@ class Game():
 
         self.stan = "menu"
         self.butelki = 0
-        self.money = 100.0
 
         self.trash_ar = []
         for i in range(self.MAX_TRASH):
@@ -76,6 +76,8 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False
+                    if event.key == pygame.K_m:
+                        self.money += 100
 
                 if self.stan == "menu":
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -218,8 +220,8 @@ class Game():
     def show_menu(self):
         self.window.blit(self.backgorund_menu, (0, 0))
 
-        tytul = self.font_big.render("Save our school", True, (255, 255, 255))
-        self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
+        # tytul = self.font_big.render("Save our school", True, (255, 255, 255))
+        # self.window.blit(tytul, (self.WIDTH / 2 - 250, self.HEIGHT / 3))
 
         self.start_button.draw()
     
@@ -245,7 +247,7 @@ class Game():
         wynik = self.font.render("Bottles: " + str(self.butelki), True, (0, 0, 0))
         m = self.font.render("Money: " + str(self.money) + "0€", True, (0,0,0))
         l = self.font.render('Lives: ' + str(self.lives), True, (0, 0, 0))
-        c = self.font.render(str(SKIN_CASE_COST)+'.00€', True, (0,0,0))
+        c = self.font.render(str(SKIN_CASE_COST)+'0€', True, (0,0,0))
         ai_cost = self.font.render(str(AI_RESEARCH_COST[self.ai_research]) + '0€', True, (0,0,0))
         speed_cost = self.font.render(str(SPEED_UPGRADE_COST)+'0€', True, (0,0,0))
         live_cost = self.font.render(str(ADD_LIVE_UPGRADE_COST)+'0€', True, (0,0,0))
@@ -295,7 +297,7 @@ class Game():
         napis2 = self.font.render(tekst, True, (255, 255, 255))
         self.window.blit(napis2, (self.WIDTH / 2 - napis2.get_width()/2, self.HEIGHT // 2))
 
-        napis3 = self.font.render("Click to go exit", True, (255, 255, 255))
+        napis3 = self.font.render("Press ESC to go exit", True, (255, 255, 255))
         self.window.blit(napis3, (self.WIDTH / 2 - napis3.get_width()/2, self.HEIGHT / 2 + 70))
 
     def init_rectangles(self):
@@ -314,7 +316,7 @@ class Game():
 
 
     def init_buttons(self):
-        self.start_button = button.Button(self.window, pygame.Rect( self.WIDTH / 2 - 215, self.HEIGHT/2, 430, 117), "images/start.png")
+        self.start_button = button.Button(self.window, pygame.Rect( self.WIDTH / 2 - 200, self.HEIGHT/2 - 200, 400, 400), "images/start.png")
         self.go_button = button.Button(self.window, pygame.Rect(20,self.HEIGHT-170,306,260/2 ), 'images/GO.png')
         self.left_button = button.Button(self.window, pygame.Rect(600,700, 66, 75), 'images/lewo.png')
         self.right_button = button.Button(self.window, pygame.Rect(1200,700, 66, 75), 'images/prawo.png')
