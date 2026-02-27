@@ -200,7 +200,7 @@ class Game():
          self.player.move()
          for trash in self.trash_ar:
             trash.update()
-            if trash.rect.y > self.HEIGHT:
+            if trash.rect.y > self.HEIGHT+200:
                 self.trash_ar.remove(trash)
                 self.trash_ar.append(trashclass.Trash(self.window,self.WIDTH, self.HEIGHT))
             if trash.hibox.colliderect(self.player.hitbox):
